@@ -10,85 +10,83 @@
 <style>
 
 body{
-margin:0;
-background:black;
-overflow:hidden;
-height:100vh;
-touch-action:pan-y;
+    margin:0;
+    background:black;
+    height:100vh;
+    touch-action:pan-y;
 }
 
 #viewer{
-position:relative;
-width:100%;
-height:100%;
-background:black;
-overflow:hidden;
+    position:relative;
+    width:100%;
+    height:100%;
+    background:black;
+    overflow:hidden; /* seulement le viewer */
 }
 
 .slide{
-position:absolute;
-width:100%;
-height:100%;
-object-fit:contain; /* ✅ CORRECTION */
-top:0;
-left:0;
-opacity:0;
-transition:opacity 1s ease-in-out, transform 8s ease-in-out;
+    position:absolute;
+    width:100%;
+    height:100%;
+    object-fit:contain; 
+    top:0;
+    left:0;
+    opacity:0;
+    transition:opacity 1s ease-in-out, transform 8s ease-in-out;
 }
 
 .visible{
-opacity:1;
+    opacity:1;
 }
 
-/* Ken Burns léger (sans couper l'image) */
 .zoom{
-transform:scale(1.05);
+    transform:scale(1.05);
 }
 
 #caption{
-position:absolute;
-bottom:20px;
-width:100%;
-text-align:center;
-color:white;
-font-size:18px;
-background:rgba(0,0,0,0.4);
-padding:10px;
-z-index:10;
+    position:absolute;
+    bottom:20px;
+    width:100%;
+    text-align:center;
+    color:white;
+    font-size:18px;
+    background:rgba(0,0,0,0.4);
+    padding:10px;
+    z-index:10;
 }
 
 .nav{
-position:absolute;
-top:50%;
-font-size:40px;
-color:white;
-cursor:pointer;
-padding:10px;
-user-select:none;
-z-index:10;
+    position:absolute;
+    top:50%;
+    font-size:40px;
+    color:white;
+    cursor:pointer;
+    padding:10px;
+    user-select:none;
+    z-index:10;
 }
 
 .left{left:10px}
 .right{right:10px}
 
-/* Bouton retour à la carte plus grand */
+/* Bouton retour à la carte */
 .back{
-position:absolute;
-top:10px;
-left:10px;
-background:white;
-padding:14px 20px;   /* plus grand */
-border-radius:10px;
-text-decoration:none;
-font-weight:bold;
-font-size:22px;       /* texte plus grand */
-z-index:10;
+    position:absolute;
+    top:10px;
+    left:10px;
+    background:white;
+    padding:14px 20px; 
+    border-radius:10px;
+    text-decoration:none;
+    font-weight:bold;
+    font-size:22px;
+    z-index:20; /* supérieur au caption */
 }
 
 @media(max-width:600px){
-#caption{font-size:14px}
-.nav{font-size:30px}
-.back{font-size:18px; padding:10px 14px;} /* adapter pour mobile */
+    #caption{font-size:14px}
+    .nav{font-size:30px}
+    .back{font-size:18px; padding:10px 14px;}
 }
 
 </style>
@@ -100,8 +98,8 @@ z-index:10;
 <a href="map.html" class="back">← Carte</a>
 
 <div id="viewer">
-<img id="img1" class="slide visible">
-<img id="img2" class="slide">
+    <img id="img1" class="slide visible">
+    <img id="img2" class="slide">
 </div>
 
 <div class="nav left" onclick="prev()">❮</div>
