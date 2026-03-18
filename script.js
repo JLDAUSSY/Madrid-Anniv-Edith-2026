@@ -1,6 +1,3 @@
-// =======================
-// LISTE DES PHOTOS ET TITRES
-// =======================
 const sets = {
     palais:[16,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50],
     cathedrale:[14,15,21,25,51,52,53,54,55,56,57],
@@ -21,38 +18,23 @@ const sets = {
 sets.all = [].concat(...Object.values(sets))
 
 const titles = {
-    1:"Plaza Santa Ana",
-    2:"Plaza de Canalejas",
-    3:"Palacio de la Equitativa",
-    4:"L'Ours et l'Arbousier",
-    5:"Pub pour Tio Pepe",
-    6:"Statue Du Roi Charles III",
-    7:"Plaza Mayor",
-    8:"Plaza Mayor, statue de Felipe III ",
-    9:"Plaza Mayor",
-    10:"Plaza Mayor",
-    // ... compléter avec tous tes titres comme avant
-    18:"Madrid 2026 à l'occasion de l'anniversaire d'Edith"
+    // (copier tous tes titres ici)
 }
 
-// =======================
-// PARAMÈTRES
-// =======================
 const params = new URLSearchParams(window.location.search)
 const set = params.get('set')
 const numbers = sets[set] || sets.all
+const slideshowItems = numbers.map(num => ({ src: `photos/${num}.jpg`, title: titles[num] || "" }))
 
-const slideshowItems = numbers.map(num => ({
-    src: `photos/${num}.jpg`,
-    title: titles[num] || ""
-}))
-
+// =======================
+// VARIABLES
+// =======================
 let index = 0
-const imgElement = document.getElementById('img1')
+const imgElement = document.getElementById('img1') // une seule image
 const caption = document.getElementById('caption')
 
 // =======================
-// PRÉCHARGEMENT DES IMAGES
+// PRÉCHARGEMENT COMPLET
 // =======================
 slideshowItems.forEach(item => {
     const img = new Image()
@@ -60,7 +42,7 @@ slideshowItems.forEach(item => {
 })
 
 // =======================
-// AFFICHER IMAGE + TITRE
+// AFFICHER UNE IMAGE
 // =======================
 function show() {
     const item = slideshowItems[index]
