@@ -5,10 +5,9 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Photos</title>
+<title>Diaporama Madrid 2026</title>
 
 <style>
-
 body {
     margin:0;
     background:black;
@@ -31,28 +30,20 @@ body {
     object-fit:contain;
     top:0;
     left:0;
-    opacity:0;
-    transition:opacity 1s ease-in-out, transform 8s ease-in-out;
-}
-
-.visible {
     opacity:1;
-}
-
-.zoom {
-    transform:scale(1.05);
 }
 
 #caption {
     position:absolute;
-    bottom:20px;
+    bottom:0;
     width:100%;
     text-align:center;
     color:white;
     font-size:18px;
-    background:rgba(0,0,0,0.5);
+    background:rgba(0,0,0,0.6);
     padding:12px 10px;
-    z-index:15; /* au-dessus des images mais sous le bouton */
+    z-index:20;
+    box-sizing:border-box;
 }
 
 .nav {
@@ -69,39 +60,34 @@ body {
 .left {left:10px;}
 .right {right:10px;}
 
-/* Bouton XXL centré */
 .back {
     position:absolute;
     top:10px;
-    left:50%;
-    transform:translateX(-50%);
+    left:10px;
     background:white;
-    padding:20px 30px;
-    border-radius:12px;
+    padding:12px 18px;
+    border-radius:8px;
     text-decoration:none;
     font-weight:bold;
-    font-size:28px;
-    z-index:20; /* au-dessus de tout */
-    box-shadow:0 4px 10px rgba(0,0,0,0.5);
+    font-size:20px;
+    z-index:30;
 }
 
 @media(max-width:600px){
     #caption {font-size:14px; padding:8px 6px;}
     .nav {font-size:30px;}
-    .back {font-size:22px; padding:14px 20px;}
+    .back {font-size:16px; padding:8px 12px;}
 }
-
 </style>
 
 </head>
 
 <body>
 
-<a href="map.html" class="back">← Retour à la carte</a>
+<a href="map.html" class="back">← Carte</a>
 
 <div id="viewer">
-    <img id="img1" class="slide visible">
-    <img id="img2" class="slide">
+    <img id="img1" class="slide">
 </div>
 
 <div class="nav left" onclick="prev()">❮</div>
@@ -109,7 +95,95 @@ body {
 
 <div id="caption"></div>
 
-<script src="script.js"></script>
+<script>
+// =======================
+// LISTE DES PHOTOS ET TITRES
+// =======================
+const sets = {
+    palais:[16,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50],
+    cathedrale:[14,15,21,25,51,52,53,54,55,56,57],
+    francisco:[93,92],
+    prado:[74,75,76,77,78,79,80,81,82,83,84,85,86,87,88,89,90],
+    thyssen:[94,95,96,98,99,100,101,102,103,104,105,106,107,108,109,110,111,112],
+    vues:[21,68,70],
+    edith:[18],
+    letras:[1,2],
+    sol:[3,4,5,6,60,61,62,63,64,65,68,69,70],
+    austrias:[7,8,9,10,11,12,23,66,67],
+    latina:[13,24,58,59,71,91],
+    arguelles:[19,20,22],
+    lavapies:[72],
+    retiro:[73]
+}
+
+sets.all = [].concat(...Object.values(sets))
+
+const titles = {
+    1:"Plaza Santa Ana",
+    2:"Plaza de Canalejas",
+    3:"Palacio de la Equitativa",
+    4:"L'Ours et l'Arbousier",
+    5:"Pub pour Tio Pepe",
+    6:"Statue Du Roi Charles III",
+    7:"Plaza Mayor",
+    8:"Plaza Mayor, statue de Felipe III ",
+    9:"Plaza Mayor",
+    10:"Plaza Mayor",
+    16:"Palais Royal",
+    18:"Madrid 2026 à l'occasion de l'anniversaire d'Edith"
+    // … ajoute ici tous tes autres titres
+}
+
+// =======================
+// PARAMÈTRES
+// =======================
+const params = new URLSearchParams(window.location.search)
+const set = params.get('set')
+const numbers = sets[set] || sets.all
+
+const items = numbers.map(num => ({
+    src:`photos/${num}.jpg`,
+    title: titles[num] || ""
+}))
+
+let index = 0
+const img = document.getElementById('img1')
+const caption = document.getElementById('caption')
+
+// Affiche image et titre
+function show() {
+    const item = items[index]
+    const pre = new Image()
+    pre.onload = () => {
+        img.src = item.src
+        caption.innerText = item.title
+    }
+    pre.src = item.src
+}
+
+// Navigation
+function next(){ index=(index+1)%items.length; show() }
+function prev(){ index=(index-1+items.length)%items.length; show() }
+
+// Clavier
+document.addEventListener('keydown', e => {
+    if(e.key==="ArrowRight") next()
+    if(e.key==="ArrowLeft") prev()
+})
+
+// Swipe
+let startX=0
+document.addEventListener('touchstart',e=>{startX=e.touches[0].clientX})
+document.addEventListener('touchend',e=>{
+    const endX = e.changedTouches[0].clientX
+    if(endX-startX>50) prev()
+    if(startX-endX>50) next()
+})
+
+// Démarrage
+show()
+
+</script>
 
 </body>
 </html>
