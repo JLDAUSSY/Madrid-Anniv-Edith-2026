@@ -30,7 +30,7 @@ body {
     object-fit:contain;
     top:0;
     left:0;
-    opacity:1;
+    z-index:1; /* image derrière tout */
 }
 
 #caption {
@@ -42,7 +42,7 @@ body {
     font-size:18px;
     background:rgba(0,0,0,0.6);
     padding:12px 10px;
-    z-index:20;
+    z-index:50; /* caption au-dessus */
     box-sizing:border-box;
 }
 
@@ -63,14 +63,14 @@ body {
 .back {
     position:absolute;
     top:10px;
-    left:10px;
+    left:10px; /* bouton bien à gauche */
     background:white;
     padding:12px 18px;
     border-radius:8px;
     text-decoration:none;
     font-weight:bold;
     font-size:20px;
-    z-index:30;
+    z-index:60; /* toujours au-dessus */
 }
 
 @media(max-width:600px){
@@ -79,7 +79,6 @@ body {
     .back {font-size:16px; padding:8px 12px;}
 }
 </style>
-
 </head>
 
 <body>
@@ -114,9 +113,9 @@ const sets = {
     arguelles:[19,20,22],
     lavapies:[72],
     retiro:[73]
-}
+};
 
-sets.all = [].concat(...Object.values(sets))
+sets.all = [].concat(...Object.values(sets));
 
 const titles = {
     1:"Plaza Santa Ana",
@@ -126,63 +125,76 @@ const titles = {
     5:"Pub pour Tio Pepe",
     6:"Statue Du Roi Charles III",
     7:"Plaza Mayor",
-    8:"Plaza Mayor, statue de Felipe III ",
+    8:"Plaza Mayor, statue de Felipe III",
     9:"Plaza Mayor",
     10:"Plaza Mayor",
     16:"Palais Royal",
     18:"Madrid 2026 à l'occasion de l'anniversaire d'Edith"
-    // … ajoute ici tous tes autres titres
-}
+    // … ajoute tous tes autres titres ici
+};
 
 // =======================
 // PARAMÈTRES
 // =======================
-const params = new URLSearchParams(window.location.search)
-const set = params.get('set')
-const numbers = sets[set] || sets.all
+const params = new URLSearchParams(window.location.search);
+const set = params.get('set');
+const numbers = sets[set] || sets.all;
 
 const items = numbers.map(num => ({
     src:`photos/${num}.jpg`,
     title: titles[num] || ""
-}))
+}));
 
-let index = 0
-const img = document.getElementById('img1')
-const caption = document.getElementById('caption')
+let index = 0;
+const img = document.getElementById('img1');
+const caption = document.getElementById('caption');
 
-// Affiche image et titre
+// =======================
+// PRÉCHARGEMENT
+// =======================
+items.forEach(item => {
+    const pre = new Image();
+    pre.src = item.src;
+});
+
+// =======================
+// AFFICHAGE IMAGE + TITRE
+// =======================
 function show() {
-    const item = items[index]
-    const pre = new Image()
-    pre.onload = () => {
-        img.src = item.src
-        caption.innerText = item.title
-    }
-    pre.src = item.src
+    const item = items[index];
+    img.src = item.src;          // directement
+    caption.innerText = item.title; // titre visible
 }
 
-// Navigation
-function next(){ index=(index+1)%items.length; show() }
-function prev(){ index=(index-1+items.length)%items.length; show() }
+// =======================
+// NAVIGATION
+// =======================
+function next(){ index=(index+1)%items.length; show(); }
+function prev(){ index=(index-1+items.length)%items.length; show(); }
 
-// Clavier
+// =======================
+// CLAVIER
+// =======================
 document.addEventListener('keydown', e => {
-    if(e.key==="ArrowRight") next()
-    if(e.key==="ArrowLeft") prev()
-})
+    if(e.key==="ArrowRight") next();
+    if(e.key==="ArrowLeft") prev();
+});
 
-// Swipe
-let startX=0
-document.addEventListener('touchstart',e=>{startX=e.touches[0].clientX})
-document.addEventListener('touchend',e=>{
-    const endX = e.changedTouches[0].clientX
-    if(endX-startX>50) prev()
-    if(startX-endX>50) next()
-})
+// =======================
+// SWIPE MOBILE
+// =======================
+let startX=0;
+document.addEventListener('touchstart', e => { startX=e.touches[0].clientX });
+document.addEventListener('touchend', e => {
+    const endX = e.changedTouches[0].clientX;
+    if(endX-startX>50) prev();
+    if(startX-endX>50) next();
+});
 
-// Démarrage
-show()
-
+// =======================
+// DÉMARRAGE
+// =======================
+show();
 </script>
 
 </body>
