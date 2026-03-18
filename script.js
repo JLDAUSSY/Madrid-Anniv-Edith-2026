@@ -94,11 +94,13 @@ function show() {
     const img = new Image()
     img.onload = function() {
         nextImg.src = currentItem.src
-        document.getElementById('caption').innerText = currentItem.title
-        nextImg.classList.add('visible')
-        currentImg.classList.remove('visible')
-        setTimeout(()=> nextImg.classList.add('zoom'), 50)
-        showingA = !showingA
+        nextImg.onload = function() {
+            document.getElementById('caption').innerText = currentItem.title
+            nextImg.classList.add('visible')
+            currentImg.classList.remove('visible')
+            setTimeout(()=> nextImg.classList.add('zoom'), 50)
+            showingA = !showingA
+        }
     }
     img.src = currentItem.src
 }
