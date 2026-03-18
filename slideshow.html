@@ -71,21 +71,24 @@ z-index:10;
 .left{left:10px}
 .right{right:10px}
 
+/* Bouton retour à la carte plus grand */
 .back{
 position:absolute;
 top:10px;
 left:10px;
 background:white;
-padding:8px 12px;
-border-radius:8px;
+padding:14px 20px;   /* plus grand */
+border-radius:10px;
 text-decoration:none;
 font-weight:bold;
+font-size:22px;       /* texte plus grand */
 z-index:10;
 }
 
 @media(max-width:600px){
 #caption{font-size:14px}
 .nav{font-size:30px}
+.back{font-size:18px; padding:10px 14px;} /* adapter pour mobile */
 }
 
 </style>
