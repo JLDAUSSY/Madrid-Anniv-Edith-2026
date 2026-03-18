@@ -9,53 +9,53 @@
 
 <style>
 
-body{
+body {
     margin:0;
     background:black;
     height:100vh;
     touch-action:pan-y;
 }
 
-#viewer{
+#viewer {
     position:relative;
     width:100%;
     height:100%;
     background:black;
-    overflow:hidden; /* seulement le viewer */
+    overflow:hidden;
 }
 
-.slide{
+.slide {
     position:absolute;
     width:100%;
     height:100%;
-    object-fit:contain; 
+    object-fit:contain;
     top:0;
     left:0;
     opacity:0;
     transition:opacity 1s ease-in-out, transform 8s ease-in-out;
 }
 
-.visible{
+.visible {
     opacity:1;
 }
 
-.zoom{
+.zoom {
     transform:scale(1.05);
 }
 
-#caption{
+#caption {
     position:absolute;
     bottom:20px;
     width:100%;
     text-align:center;
     color:white;
     font-size:18px;
-    background:rgba(0,0,0,0.4);
-    padding:10px;
-    z-index:10;
+    background:rgba(0,0,0,0.5);
+    padding:12px 10px;
+    z-index:15; /* au-dessus des images mais sous le bouton */
 }
 
-.nav{
+.nav {
     position:absolute;
     top:50%;
     font-size:40px;
@@ -66,27 +66,29 @@ body{
     z-index:10;
 }
 
-.left{left:10px}
-.right{right:10px}
+.left {left:10px;}
+.right {right:10px;}
 
-/* Bouton retour à la carte */
-.back{
+/* Bouton XXL centré */
+.back {
     position:absolute;
     top:10px;
-    left:10px;
+    left:50%;
+    transform:translateX(-50%);
     background:white;
-    padding:14px 20px; 
-    border-radius:10px;
+    padding:20px 30px;
+    border-radius:12px;
     text-decoration:none;
     font-weight:bold;
-    font-size:22px;
-    z-index:20; /* supérieur au caption */
+    font-size:28px;
+    z-index:20; /* au-dessus de tout */
+    box-shadow:0 4px 10px rgba(0,0,0,0.5);
 }
 
 @media(max-width:600px){
-    #caption{font-size:14px}
-    .nav{font-size:30px}
-    .back{font-size:18px; padding:10px 14px;}
+    #caption {font-size:14px; padding:8px 6px;}
+    .nav {font-size:30px;}
+    .back {font-size:22px; padding:14px 20px;}
 }
 
 </style>
@@ -95,7 +97,7 @@ body{
 
 <body>
 
-<a href="map.html" class="back">← Carte</a>
+<a href="map.html" class="back">← Retour à la carte</a>
 
 <div id="viewer">
     <img id="img1" class="slide visible">
