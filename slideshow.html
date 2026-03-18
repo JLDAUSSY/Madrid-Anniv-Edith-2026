@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Photos</title>
+
+<style>
+
+body{
+margin:0;
+background:black;
+overflow:hidden;
+height:100vh;
+touch-action:pan-y;
+}
+
+#viewer{
+position:relative;
+width:100%;
+height:100%;
+background:black;
+overflow:hidden;
+}
+
+.slide{
+position:absolute;
+width:100%;
+height:100%;
+object-fit:contain; /* ✅ CORRECTION */
+top:0;
+left:0;
+opacity:0;
+transition:opacity 1s ease-in-out, transform 8s ease-in-out;
+}
+
+.visible{
+opacity:1;
+}
+
+/* Ken Burns léger (sans couper l'image) */
+.zoom{
+transform:scale(1.05);
+}
+
+#caption{
+position:absolute;
+bottom:20px;
+width:100%;
+text-align:center;
+color:white;
+font-size:18px;
+background:rgba(0,0,0,0.4);
+padding:10px;
+z-index:10;
+}
+
+.nav{
+position:absolute;
+top:50%;
+font-size:40px;
+color:white;
+cursor:pointer;
+padding:10px;
+user-select:none;
+z-index:10;
+}
+
+.left{left:10px}
+.right{right:10px}
+
+.back{
+position:absolute;
+top:10px;
+left:10px;
+background:white;
+padding:8px 12px;
+border-radius:8px;
+text-decoration:none;
+font-weight:bold;
+z-index:10;
+}
+
+@media(max-width:600px){
+#caption{font-size:14px}
+.nav{font-size:30px}
+}
+
+</style>
+
+</head>
+
+<body>
+
+<a href="map.html" class="back">← Carte</a>
+
+<div id="viewer">
+<img id="img1" class="slide visible">
+<img id="img2" class="slide">
+</div>
+
+<div class="nav left" onclick="prev()">❮</div>
+<div class="nav right" onclick="next()">❯</div>
+
+<div id="caption"></div>
+
+<script src="script.js"></script>
+
+</body>
+</html>

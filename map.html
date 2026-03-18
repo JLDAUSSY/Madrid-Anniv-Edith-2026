@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+<meta charset="UTF-8">
+<title>Madrid 12 au 15 mars 2026</title>
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css"/>
+<script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+
+<style>
+
+body{
+margin:0;
+font-family:Arial, Helvetica, sans-serif;
+background:white;
+overflow:hidden;
+}
+
+/* HEADER AU-DESSUS DE LA CARTE */
+header{
+position:absolute;
+top:0;
+width:100%;
+text-align:center;
+padding:15px;
+font-size:26px;
+font-weight:700;
+background:white;
+z-index:1000;
+}
+
+/* CARTE FULL SCREEN */
+#map{
+position:absolute;
+top:0;
+left:0;
+width:100%;
+height:100%;
+z-index:1;
+}
+
+/* BOUTONS */
+.bottom{
+position:absolute;
+bottom:15px;
+width:100%;
+text-align:center;
+display:flex;
+justify-content:center;
+gap:10px;
+flex-wrap:wrap;
+z-index:1000;
+}
+
+.btn3d{
+background:linear-gradient(145deg,#4da3ff,#1a5fd1);
+color:white;
+padding:10px 16px;
+border-radius:10px;
+font-weight:bold;
+text-decoration:none;
+box-shadow:0 4px 0 #0d3c91, 0 6px 10px rgba(0,0,0,0.2);
+}
+
+.btn3d:active{
+transform:translateY(3px);
+box-shadow:0 1px 0 #0d3c91;
+}
+
+/* LABELS PARFAITS */
+.quartier-label{
+background:rgba(255,255,255,0.95);
+border:2px solid #2A7FFF;
+padding:2px 8px;
+border-radius:6px;
+font-size:13px;
+font-weight:bold;
+cursor:pointer;
+
+white-space:nowrap;
+display:inline-flex;
+align-items:center;
+justify-content:center;
+line-height:1.2;
+box-sizing:border-box;
+
+box-shadow:0 2px 6px rgba(0,0,0,0.2);
+}
+
+/* FIX LEAFLET */
+.leaflet-div-icon{
+background:transparent;
+border:none;
+}
+
+.leaflet-marker-icon{
+width:auto !important;
+height:auto !important;
+}
+
+@media(max-width:600px){
+header{font-size:18px;padding:10px;}
+}
+
+</style>
+</head>
+
+<body>
+
+<header>Madrid 12 au 15 mars 2026</header>
+
+<div id="map"></div>
+
+<div class="bottom">
+<a href="slideshow.html?set=all" class="btn3d">Toutes les photos</a>
+<a href="slideshow.html?set=edith" class="btn3d">?</a>
+</div>
+
+<script>
+
+var map = L.map('map', {
+zoomControl:true
+}).setView([40.4168,-3.7038],13)
+
+/* LIMITES */
+var bounds = L.latLngBounds(
+[40.39,-3.75],
+[40.45,-3.65]
+)
+
+map.setMaxBounds(bounds)
+
+L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{
+maxZoom:19,
+attribution:'© OpenStreetMap'
+}).addTo(map)
+
+/* FIT + VERROUILLAGE */
+map.fitBounds(bounds, {padding:[20,20]})
+map.setMinZoom(map.getZoom())
+
+function go(set){
+window.location.href="slideshow.html?set="+set
+}
+
+/* MONUMENTS */
+function lieu(lat,lon,name,set){
+
+L.circleMarker([lat,lon],{
+radius:6,
+color:"#d33",
+fillColor:"#ff5555",
+fillOpacity:0.9
+}).addTo(map)
+
+var label=L.marker([lat,lon],{
+icon:L.divIcon({
+className:'quartier-label',
+html:name
+})
+}).addTo(map)
+
+label.on('click',function(){go(set)})
+}
+
+lieu(40.4179,-3.7143,"Palais Royal","palais")
+lieu(40.4150,-3.7140,"Cathédrale Almudena","cathedrale")
+lieu(40.4101,-3.7140,"Basilique San Francisco el Grande","francisco")
+lieu(40.4138,-3.6921,"Musée du Prado","prado")
+lieu(40.4160,-3.6946,"Musée Thyssen-Bornemisza","thyssen")
+
+/* ZONES */
+function zone(bounds){
+L.rectangle(bounds,{
+color:"#2A7FFF",
+weight:1,
+fillColor:"#2A7FFF",
+fillOpacity:0.08
+}).addTo(map)
+}
+
+/* QUARTIERS */
+function quartier(lat,lon,name,set){
+var label=L.marker([lat,lon],{
+icon:L.divIcon({
+className:'quartier-label',
+html:name
+})
+}).addTo(map)
+
+label.on('click',function(){go(set)})
+}
+
+zone([[40.4128,-3.7045],[40.4152,-3.7005]])
+quartier(40.4140,-3.7025,"Las Letras","letras")
+
+zone([[40.4165,-3.7075],[40.4195,-3.7030]])
+quartier(40.4180,-3.7050,"Sol","sol")
+
+zone([[40.4155,-3.7145],[40.4190,-3.7105]])
+quartier(40.4175,-3.7120,"Las Austrias","austrias")
+
+zone([[40.4095,-3.7110],[40.4125,-3.7070]])
+quartier(40.4115,-3.7090,"La Latina","latina")
+
+zone([[40.4290,-3.7220],[40.4325,-3.7180]])
+quartier(40.4310,-3.7200,"Argüelles","arguelles")
+
+zone([[40.4080,-3.7035],[40.4105,-3.6990]])
+quartier(40.4090,-3.7010,"Lavapies","lavapies")
+
+zone([[40.4140,-3.6840],[40.4170,-3.6785]])
+quartier(40.4155,-3.6810,"Retiro","retiro")
+
+</script>
+
+</body>
+</html>
