@@ -30,7 +30,7 @@ sets.all = [].concat(
 const titles = {
 1:"Plaza Santa Ana",2:"Plaza de Canalejas",3:"Palacio de la Equitativa",4:"L'Ours et l'Arbousier (El Oso y el Madroño), symbole de la ville de Madrid",5:"Pub pour Tio Pepe, sherry sec de Jerez",
 6:"Statue Du Roi Charles III",7:"Plaza Mayor",8:"Plaza Mayor, statue de Felipe III",9:"Plaza Mayor",10:"Plaza Mayor",
-11:"Plaza Mayor",12:"plaza de la Villa",13:"Iglesia Catedral de las Fuerzas Armadas",14:"Cathédrale de la Almudena",15:"Entrée De La Crypte De La Cathédrale de la Almudena",
+11:"Plaza Mayor",12:"plaza de la Villa",13:"Iglesia Catedral de las Fuerzas Armadas",14:"Cathédrale de la Almudena",15:"Entrée De La Crypte De La Cathédrale de l'Almudena",
 16:"Palais Royal",17:"Cathédrale de la Almudena",18:"Madrid 2026 à l'occasion de l'anniversaire d'Edith, le 12 mars",19:"Casa Gallardo",20:"Temple égyptien d'Amon (ou Temple de Debod)",
 21:"La cathédrale et le palais royal",22:"Fuente del Cielo",23:"Plaza Mayor",24:"Plaza de Ramales",25:"Cathédrale de la Almudena",
 26:"Palais Royal - statue de Moctezuma II",27:"Grand escalier du Palais Royal",28:"Palais Royal",29:"Palais Royal",30:"Palais Royal",
@@ -68,6 +68,14 @@ const numbers = sets[set] || sets.all
 
 // Créer tableau d’objets image + titre
 const slideshowItems = numbers.map(num => ({ src: `photos/${num}.jpg`, title: titles[num] || "" }))
+
+// =======================
+// PRÉCHARGEMENT DE TOUTES LES IMAGES
+// =======================
+slideshowItems.forEach(item => {
+    const img = new Image();
+    img.src = item.src;
+})
 
 let index = 0
 let imgA = document.getElementById('img1')
