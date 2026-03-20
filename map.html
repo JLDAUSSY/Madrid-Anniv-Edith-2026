@@ -125,22 +125,13 @@ var map = L.map('map', {
 zoomControl:true
 }).setView([40.4168,-3.7038],13)
 
-/* LIMITES */
-var bounds = L.latLngBounds(
-[40.39,-3.75],
-[40.45,-3.65]
-)
-
-map.setMaxBounds(bounds)
+/* GROUPE POUR RECENTRAGE AUTOMATIQUE */
+var allMarkers = L.featureGroup().addTo(map);
 
 L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{
 maxZoom:19,
 attribution:'© OpenStreetMap'
 }).addTo(map)
-
-/* FIT + VERROUILLAGE */
-map.fitBounds(bounds, {padding:[20,20]})
-map.setMinZoom(map.getZoom())
 
 function go(set){
 window.location.href="slideshow.html?set="+set
@@ -154,23 +145,17 @@ radius:6,
 color:"#d33",
 fillColor:"#ff5555",
 fillOpacity:0.9
-}).addTo(map)
+}).addTo(allMarkers) // Ajouté au groupe
 
 var label=L.marker([lat,lon],{
 icon:L.divIcon({
 className:'quartier-label',
 html:name
 })
-}).addTo(map)
+}).addTo(allMarkers) // Ajouté au groupe
 
 label.on('click',function(){go(set)})
 }
-
-lieu(40.4179,-3.7143,"Palais Royal","palais")
-lieu(40.4150,-3.7140,"Cathédrale Almudena","cathedrale")
-lieu(40.4101,-3.7140,"Basilique San Francisco el Grande","francisco")
-lieu(40.4138,-3.6921,"Musée du Prado","prado")
-lieu(40.4160,-3.6946,"Musée Thyssen-Bornemisza","thyssen")
 
 /* ZONES */
 function zone(bounds){
@@ -179,7 +164,7 @@ color:"#2A7FFF",
 weight:1,
 fillColor:"#2A7FFF",
 fillOpacity:0.08
-}).addTo(map)
+}).addTo(allMarkers) // Ajouté au groupe
 }
 
 /* QUARTIERS */
@@ -189,10 +174,17 @@ icon:L.divIcon({
 className:'quartier-label',
 html:name
 })
-}).addTo(map)
+}).addTo(allMarkers) // Ajouté au groupe
 
 label.on('click',function(){go(set)})
 }
+
+// APPELS DES LIEUX ET ZONES
+lieu(40.4179,-3.7143,"Palais Royal","palais")
+lieu(40.4150,-3.7140,"Cathédrale Almudena","cathedrale")
+lieu(40.4101,-3.7140,"Basilique San Francisco el Grande","francisco")
+lieu(40.4138,-3.6921,"Musée du Prado","prado")
+lieu(40.4160,-3.6946,"Musée Thyssen-Bornemisza","thyssen")
 
 zone([[40.4128,-3.7045],[40.4152,-3.7005]])
 quartier(40.4140,-3.7025,"Las Letras","letras")
@@ -214,6 +206,14 @@ quartier(40.4090,-3.7010,"Lavapies","lavapies")
 
 zone([[40.4140,-3.6840],[40.4170,-3.6785]])
 quartier(40.4155,-3.6810,"Retiro","retiro")
+
+/* AJUSTEMENT FINAL DE LA VUE */
+// On cadre sur les marqueurs avec une marge de 50 pixels
+map.fitBounds(allMarkers.getBounds(), {padding:[50,50]})
+// On verrouille le dézoom pour ne pas perdre la ville de vue
+map.setMinZoom(map.getZoom())
+// On définit les limites max pour éviter de scroller à l'infini
+map.setMaxBounds(allMarkers.getBounds().pad(0.5))
 
 </script>
 

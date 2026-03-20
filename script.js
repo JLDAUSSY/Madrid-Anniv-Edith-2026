@@ -59,7 +59,7 @@ const titles = {
 37:"Salón De Gasparini",
 38:"Salón De Gasparini",
 39:"Salón De Gasparini",
-40:"nSalón De Gasparini",
+40:"Salón De Gasparini",
 41:"Le cabinet de porcelaine",
 42:"Le cabinet de porcelaine",
 43:"Palais Royal",
