@@ -5,34 +5,33 @@
 <meta charset="UTF-8">
 <title>Madrid 12 au 15 mars 2026</title>
 
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 
 <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css"/>
 <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
 
 <style>
-
 body{
 margin:0;
 font-family:Arial, Helvetica, sans-serif;
 background:white;
 overflow:hidden;
+-webkit-text-size-adjust: 100%;
 }
 
-/* HEADER AU-DESSUS DE LA CARTE */
 header{
 position:absolute;
 top:0;
 width:100%;
 text-align:center;
 padding:15px;
-font-size:26px;
+font-size:24px;
 font-weight:700;
-background:white;
+background:rgba(255,255,255,0.9);
 z-index:1000;
+border-bottom: 1px solid #ddd;
 }
 
-/* CARTE FULL SCREEN */
 #map{
 position:absolute;
 top:0;
@@ -42,10 +41,9 @@ height:100%;
 z-index:1;
 }
 
-/* BOUTONS */
 .bottom{
 position:absolute;
-bottom:15px;
+bottom:20px;
 width:100%;
 text-align:center;
 display:flex;
@@ -58,11 +56,12 @@ z-index:1000;
 .btn3d{
 background:linear-gradient(145deg,#4da3ff,#1a5fd1);
 color:white;
-padding:10px 16px;
+padding:12px 20px;
 border-radius:10px;
 font-weight:bold;
 text-decoration:none;
 box-shadow:0 4px 0 #0d3c91, 0 6px 10px rgba(0,0,0,0.2);
+font-size: 16px;
 }
 
 .btn3d:active{
@@ -70,41 +69,28 @@ transform:translateY(3px);
 box-shadow:0 1px 0 #0d3c91;
 }
 
-/* LABELS PARFAITS */
 .quartier-label{
 background:rgba(255,255,255,0.95);
 border:2px solid #2A7FFF;
-padding:2px 8px;
+padding:4px 10px;
 border-radius:6px;
 font-size:13px;
 font-weight:bold;
 cursor:pointer;
-
 white-space:nowrap;
 display:inline-flex;
 align-items:center;
 justify-content:center;
-line-height:1.2;
-box-sizing:border-box;
-
 box-shadow:0 2px 6px rgba(0,0,0,0.2);
 }
 
-/* FIX LEAFLET */
-.leaflet-div-icon{
-background:transparent;
-border:none;
-}
-
-.leaflet-marker-icon{
-width:auto !important;
-height:auto !important;
-}
+.leaflet-div-icon{ background:transparent; border:none; }
+.leaflet-marker-icon{ width:auto !important; height:auto !important; }
 
 @media(max-width:600px){
 header{font-size:18px;padding:10px;}
+.btn3d{padding:10px 15px; font-size:14px;}
 }
-
 </style>
 </head>
 
@@ -116,104 +102,89 @@ header{font-size:18px;padding:10px;}
 
 <div class="bottom">
 <a href="slideshow.html?set=all" class="btn3d">Toutes les photos</a>
-<a href="slideshow.html?set=edith" class="btn3d">?</a>
+<a href="slideshow.html?set=edith" class="btn3d">Edith</a>
 </div>
 
 <script>
+// Création de la carte
+var map = L.map('map', {zoomControl:false}); 
 
-var map = L.map('map', {
-zoomControl:true
-}).setView([40.4168,-3.7038],13)
-
-/* GROUPE POUR RECENTRAGE AUTOMATIQUE */
+// Groupe pour contenir tous les éléments
 var allMarkers = L.featureGroup().addTo(map);
 
 L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{
-maxZoom:19,
-attribution:'© OpenStreetMap'
-}).addTo(map)
+    maxZoom:19,
+    attribution:'© OSM'
+}).addTo(map);
 
-function go(set){
-window.location.href="slideshow.html?set="+set
-}
+function go(set){ window.location.href="slideshow.html?set="+set; }
 
-/* MONUMENTS */
+// Fonction pour les points d'intérêt
 function lieu(lat,lon,name,set){
+    L.circleMarker([lat,lon],{
+        radius:6, color:"#d33", fillColor:"#ff5555", fillOpacity:0.9
+    }).addTo(allMarkers);
 
-L.circleMarker([lat,lon],{
-radius:6,
-color:"#d33",
-fillColor:"#ff5555",
-fillOpacity:0.9
-}).addTo(allMarkers) // Ajouté au groupe
-
-var label=L.marker([lat,lon],{
-icon:L.divIcon({
-className:'quartier-label',
-html:name
-})
-}).addTo(allMarkers) // Ajouté au groupe
-
-label.on('click',function(){go(set)})
+    L.marker([lat,lon],{
+        icon:L.divIcon({className:'quartier-label', html:name})
+    }).addTo(allMarkers).on('click', function(){go(set)});
 }
 
-/* ZONES */
+// Fonction pour les zones bleues
 function zone(bounds){
-L.rectangle(bounds,{
-color:"#2A7FFF",
-weight:1,
-fillColor:"#2A7FFF",
-fillOpacity:0.08
-}).addTo(allMarkers) // Ajouté au groupe
+    L.rectangle(bounds,{
+        color:"#2A7FFF", weight:1, fillColor:"#2A7FFF", fillOpacity:0.08
+    }).addTo(allMarkers);
 }
 
-/* QUARTIERS */
+// Fonction pour les noms de quartiers
 function quartier(lat,lon,name,set){
-var label=L.marker([lat,lon],{
-icon:L.divIcon({
-className:'quartier-label',
-html:name
-})
-}).addTo(allMarkers) // Ajouté au groupe
-
-label.on('click',function(){go(set)})
+    L.marker([lat,lon],{
+        icon:L.divIcon({className:'quartier-label', html:name})
+    }).addTo(allMarkers).on('click', function(){go(set)});
 }
 
-// APPELS DES LIEUX ET ZONES
-lieu(40.4179,-3.7143,"Palais Royal","palais")
-lieu(40.4150,-3.7140,"Cathédrale Almudena","cathedrale")
-lieu(40.4101,-3.7140,"Basilique San Francisco el Grande","francisco")
-lieu(40.4138,-3.6921,"Musée du Prado","prado")
-lieu(40.4160,-3.6946,"Musée Thyssen-Bornemisza","thyssen")
+// --- AJOUT DES ÉLÉMENTS ---
+lieu(40.4179,-3.7143,"Palais Royal","palais");
+lieu(40.4150,-3.7140,"Cathédrale Almudena","cathedrale");
+lieu(40.4101,-3.7140,"Basilique San Francisco el Grande","francisco");
+lieu(40.4138,-3.6921,"Musée du Prado","prado");
+lieu(40.4160,-3.6946,"Musée Thyssen-Bornemisza","thyssen");
 
-zone([[40.4128,-3.7045],[40.4152,-3.7005]])
-quartier(40.4140,-3.7025,"Las Letras","letras")
+zone([[40.4128,-3.7045],[40.4152,-3.7005]]);
+quartier(40.4140,-3.7025,"Las Letras","letras");
 
-zone([[40.4165,-3.7075],[40.4195,-3.7030]])
-quartier(40.4180,-3.7050,"Sol","sol")
+zone([[40.4165,-3.7075],[40.4195,-3.7030]]);
+quartier(40.4180,-3.7050,"Sol","sol");
 
-zone([[40.4155,-3.7145],[40.4190,-3.7105]])
-quartier(40.4175,-3.7120,"Las Austrias","austrias")
+zone([[40.4155,-3.7145],[40.4190,-3.7105]]);
+quartier(40.4175,-3.7120,"Las Austrias","austrias");
 
-zone([[40.4095,-3.7110],[40.4125,-3.7070]])
-quartier(40.4115,-3.7090,"La Latina","latina")
+zone([[40.4095,-3.7110],[40.4125,-3.7070]]);
+quartier(40.4115,-3.7090,"La Latina","latina");
 
-zone([[40.4290,-3.7220],[40.4325,-3.7180]])
-quartier(40.4310,-3.7200,"Argüelles","arguelles")
+zone([[40.4290,-3.7220],[40.4325,-3.7180]]);
+quartier(40.4310,-3.7200,"Argüelles","arguelles");
 
-zone([[40.4080,-3.7035],[40.4105,-3.6990]])
-quartier(40.4090,-3.7010,"Lavapies","lavapies")
+zone([[40.4080,-3.7035],[40.4105,-3.6990]]);
+quartier(40.4090,-3.7010,"Lavapies","lavapies");
 
-zone([[40.4140,-3.6840],[40.4170,-3.6785]])
-quartier(40.4155,-3.6810,"Retiro","retiro")
+zone([[40.4140,-3.6840],[40.4170,-3.6785]]);
+quartier(40.4155,-3.6810,"Retiro","retiro");
 
-/* AJUSTEMENT FINAL DE LA VUE */
-// On cadre sur les marqueurs avec une marge de 50 pixels
-map.fitBounds(allMarkers.getBounds(), {padding:[50,50]})
-// On verrouille le dézoom pour ne pas perdre la ville de vue
-map.setMinZoom(map.getZoom())
-// On définit les limites max pour éviter de scroller à l'infini
-map.setMaxBounds(allMarkers.getBounds().pad(0.5))
+// --- CADRAGE RESSERRÉ ---
+// On définit les limites exactes demandées
+var southWest = L.latLng(40.4070, -3.7250); // Un peu au sud de Lavapies et à l'ouest d'Arguelles
+var northEast = L.latLng(40.4340, -3.6750); // Un peu au nord d'Arguelles et à l'est de Retiro
+var myBounds = L.latLngBounds(southWest, northEast);
+
+// On applique le zoom sur ces limites précises
+map.fitBounds(myBounds, {
+    padding: [20, 20] // Marge minimale pour que ça reste "serré"
+});
+
+// Optionnel : on empêche de dézoomer trop loin pour garder ce cadrage
+map.setMinZoom(map.getZoom());
 
 </script>
 
