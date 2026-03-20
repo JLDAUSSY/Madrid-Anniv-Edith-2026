@@ -25,7 +25,6 @@ background:black;
 overflow:hidden;
 }
 
-/* ✅ TRANSITION FLUIDE + IMAGE NON COUPÉE */
 .slide{
 position:absolute;
 width:100%;
@@ -41,12 +40,10 @@ transition:opacity 0.7s ease-in-out, transform 8s ease-in-out;
 opacity:1;
 }
 
-/* effet Ken Burns léger */
 .zoom{
 transform:scale(1.05);
 }
 
-/* titre photo */
 #caption{
 position:absolute;
 bottom:20px;
@@ -59,7 +56,6 @@ padding:10px;
 z-index:10;
 }
 
-/* flèches navigation */
 .nav{
 position:absolute;
 top:50%;
@@ -75,7 +71,6 @@ z-index:10;
 .left{left:10px}
 .right{right:10px}
 
-/* bouton retour */
 .back{
 position:absolute;
 top:10px;
@@ -88,7 +83,6 @@ font-weight:bold;
 z-index:10;
 }
 
-/* responsive mobile */
 @media(max-width:600px){
 #caption{font-size:14px}
 .nav{font-size:30px}
@@ -112,7 +106,7 @@ z-index:10;
 
 <div id="caption"></div>
 
-<script src="script.js"></script>
+<script src="script.js?v=2"></script>
 
 </body>
 </html>
